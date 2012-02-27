@@ -10,12 +10,12 @@ import javax.swing.WindowConstants;
 @SuppressWarnings("serial")
 public class ResponseUI extends JFrame {
 
-    public ResponseUI(final String response, final RequestConfig config) {
+    public ResponseUI(final ResponseResult response, final RequestConfig config) {
 
-        final JTextArea responseArea = new JTextArea(50, 50);
+        final JTextArea responseArea = new JTextArea(100, 100);
         responseArea.setEditable(false);
         responseArea.setWrapStyleWord(true);
-        responseArea.setText(response);
+        responseArea.setText(response.body);
 
         final JPanel responseUI = new JPanel();
         responseUI.setLayout(new BoxLayout(responseUI, BoxLayout.PAGE_AXIS));

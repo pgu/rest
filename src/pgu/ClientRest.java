@@ -17,19 +17,19 @@ public class ClientRest {
         GET, POST, PUT
     }
 
-    public static String get(final RequestConfig config) {
+    public static ResponseResult get(final RequestConfig config) {
         return send(config, ReqMethod.GET);
     }
 
-    public static String put(final RequestConfig config) {
+    public static ResponseResult put(final RequestConfig config) {
         return send(config, ReqMethod.PUT);
     }
 
-    public static String post(final RequestConfig config) {
+    public static ResponseResult post(final RequestConfig config) {
         return send(config, ReqMethod.POST);
     }
 
-    private static String send(final RequestConfig config, final ReqMethod reqMethod) {
+    private static ResponseResult send(final RequestConfig config, final ReqMethod reqMethod) {
 
         setAuthenticationBasic(config);
 
@@ -54,25 +54,25 @@ public class ClientRest {
 
         /////// response 
 
+        final int responseCode = getResponseCode(connection);
+        final String contentType = connection.getContentType();
+        final String location = connection.getHeaderField("Location");
+        final StringBuilder sb = getResponseBody(connection);
+
+        connection.disconnect();
+
+        final ResponseResult result = new ResponseResult();
+        result.code = responseCode;
+        result.contentType = contentType;
+        result.location = location;
+        result.body = sb.toString();
+
+        return result;
+    }
+
+    private static StringBuilder getResponseBody(final HttpURLConnection connection) {
         final BufferedReader reader = getReader(connection);
-
         final StringBuilder sb = new StringBuilder();
-        sb.append("Response code: ");
-        sb.append(getResponseCode(connection));
-        sb.append("\n");
-
-        sb.append("Content-Type: ");
-        sb.append(connection.getContentType());
-        sb.append("\n");
-
-        if (ReqMethod.POST == reqMethod //
-                || ReqMethod.PUT == reqMethod // 
-        ) {
-            sb.append("Location: ");
-            sb.append(connection.getHeaderField("Location"));
-            sb.append("\n");
-        }
-
         String line = getLine(reader);
         while (line != null) {
             sb.append(line);
@@ -80,10 +80,7 @@ public class ClientRest {
 
             line = getLine(reader);
         }
-
-        connection.disconnect();
-
-        return sb.toString();
+        return sb;
     }
 
     private static void flushOutputStream(final OutputStream os) {

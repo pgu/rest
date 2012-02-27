@@ -143,7 +143,7 @@ public class AppUI extends JFrame {
             @Override
             public void run() {
                 final RequestConfig config = getRequestConfig();
-                String response = "";
+                ResponseResult response = null;
 
                 if (RequestAction.GET == action) {
                     response = ClientRest.get(config);
