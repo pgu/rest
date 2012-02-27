@@ -21,13 +21,12 @@ public class ResponseUI extends JFrame {
         responseUI.setLayout(new BoxLayout(responseUI, BoxLayout.PAGE_AXIS));
         responseUI.add(new JScrollPane(responseArea));
 
-        final JFrame resp = new JFrame();
-        resp.setTitle("Response for " + config.url);
-        resp.setSize(320, 240);
-        resp.setLocationRelativeTo(null);
-        resp.setResizable(true);
-        resp.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        resp.setContentPane(responseUI);
+        setTitle("Response for " + config.url);
+        setSize(320, 240);
+        setLocationRelativeTo(null);
+        setResizable(true);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setContentPane(responseUI);
 
     }
 
