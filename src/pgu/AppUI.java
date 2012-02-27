@@ -16,7 +16,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
 
 @SuppressWarnings("serial")
 public class AppUI extends JFrame {
@@ -29,6 +28,10 @@ public class AppUI extends JFrame {
     private final JButton       btnPost      = new JButton();
     private final JButton       btnPut       = new JButton();
     private final JTextArea     fieldBody    = new JTextArea(10, 10);
+
+    private enum RequestAction {
+        GET, PUT, POST
+    }
 
     public AppUI() {
         buildAppUI();
@@ -80,7 +83,7 @@ public class AppUI extends JFrame {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
-                ClientRest.put(getRequestConfig());
+                sendRequest(RequestAction.PUT);
             }
         });
         panel.add(btnPut);
@@ -91,7 +94,7 @@ public class AppUI extends JFrame {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
-                ClientRest.post(getRequestConfig());
+                sendRequest(RequestAction.POST);
             }
         });
         panel.add(btnPost);
@@ -102,36 +105,9 @@ public class AppUI extends JFrame {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        final RequestConfig config = getRequestConfig();
-                        final String response = ClientRest.get(config);
-
-                        // TODO PGU 
-                        final JTextArea responseArea = new JTextArea(50, 50);
-                        responseArea.setEditable(false);
-                        responseArea.setWrapStyleWord(true);
-                        responseArea.setText(response);
-                        System.out.println(response);
-
-                        final JPanel responseUI = new JPanel();
-                        responseUI.setLayout(new BoxLayout(responseUI, BoxLayout.PAGE_AXIS));
-                        responseUI.add(new JScrollPane(responseArea));
-
-                        final JFrame resp = new JFrame();
-                        resp.setTitle("Response for " + config.url);
-                        resp.setSize(320, 240);
-                        resp.setLocationRelativeTo(null);
-                        resp.setResizable(true);
-                        resp.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-                        resp.setContentPane(responseUI);
-                        resp.setVisible(true);
-                    }
-                });
-
+                sendRequest(RequestAction.GET);
             }
+
         });
         panel.add(btnGet);
     }
@@ -161,4 +137,30 @@ public class AppUI extends JFrame {
         return config;
     }
 
+    private void sendRequest(final RequestAction action) {
+        SwingUtilities.invokeLater(new Runnable() {
+
+            @Override
+            public void run() {
+                final RequestConfig config = getRequestConfig();
+                String response = "";
+
+                if (RequestAction.GET == action) {
+                    response = ClientRest.get(config);
+
+                } else if (RequestAction.POST == action) {
+                    response = ClientRest.post(config);
+
+                } else if (RequestAction.PUT == action) {
+                    response = ClientRest.put(config);
+
+                } else {
+                    throw new IllegalArgumentException("action unknown: " + action);
+                }
+
+                final ResponseUI responseUI = new ResponseUI(response, config);
+                responseUI.setVisible(true);
+            }
+        });
+    }
 }
