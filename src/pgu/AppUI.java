@@ -116,12 +116,9 @@ public class AppUI extends JFrame {
                         responseArea.setText(response);
                         System.out.println(response);
 
-                        final JScrollPane scroll = new JScrollPane(fieldBody);
-                        scroll.add(responseArea);
-
                         final JPanel responseUI = new JPanel();
                         responseUI.setLayout(new BoxLayout(responseUI, BoxLayout.PAGE_AXIS));
-                        responseUI.add(scroll);
+                        responseUI.add(new JScrollPane(responseArea));
 
                         final JFrame resp = new JFrame();
                         resp.setTitle("Response for " + config.url);
