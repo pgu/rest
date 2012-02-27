@@ -126,7 +126,7 @@ public class AppUI extends JFrame {
 
         final String url = fieldUrlBase.getText() + fieldUrl.getText();
         // TODO PGU  validation des valeurs
-        // TODO PGU add fields for password
+        // TODO PGU add fields for user/password
         // TODO PGU add fields for content type
 
         final RequestConfig config = new RequestConfig();

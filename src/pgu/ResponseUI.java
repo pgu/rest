@@ -21,6 +21,8 @@ public class ResponseUI extends JFrame {
         responseUI.setLayout(new BoxLayout(responseUI, BoxLayout.PAGE_AXIS));
         responseUI.add(new JScrollPane(responseArea));
 
+        // TODO PGU add ui for other response info
+
         setTitle("Response for " + config.url);
         setSize(320, 240);
         setLocationRelativeTo(null);
