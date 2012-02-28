@@ -39,7 +39,7 @@ public class AppUI extends JFrame {
 
     private void buildAppUI() {
         setTitle("Rest");
-        setSize(320, 240);
+        setSize(500, 300);
         setLocationRelativeTo(null);
         setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
