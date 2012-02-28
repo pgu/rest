@@ -74,6 +74,7 @@ public class AppUI extends JFrame {
     }
 
     private void addUIBody(final JPanel requestUI) {
+        fieldBody.setText("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
         final JScrollPane scroll = new JScrollPane(fieldBody);
         requestUI.add(scroll);
     }
