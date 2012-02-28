@@ -32,6 +32,7 @@ public class AppUI extends JFrame {
     private final JTextField    fieldUser        = new JTextField();
     private final JTextField    fieldPassword    = new JTextField();
     private final JTextField    fieldContentType = new JTextField();
+    private final JTextField    fieldAccept      = new JTextField();
 
     private enum RequestAction {
         GET, PUT, POST
@@ -41,12 +42,13 @@ public class AppUI extends JFrame {
         buildAppUI();
     }
 
-    private static final int WIDTH       = 500;
+    private static final int W_100       = 100;
+    private static final int W_500       = 500;
     private static final int HEIGHT_LINE = 20;
 
     private void buildAppUI() {
         setTitle("Pgu Client Rest");
-        setSize(WIDTH, 600);
+        setSize(W_500, 600);
         setLocationRelativeTo(null);
         setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -77,7 +79,7 @@ public class AppUI extends JFrame {
         addUIUserPassword(requestUI);
         requestUI.add(Box.createRigidArea(new Dimension(0, 5)));
 
-        addUIContentType(requestUI);
+        addUIContentTypeAndAccept(requestUI);
         requestUI.add(Box.createRigidArea(new Dimension(0, 5)));
 
         requestUI.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -85,43 +87,46 @@ public class AppUI extends JFrame {
         return requestUI;
     }
 
-    private void addUIContentType(final JPanel requestUI) {
-        fieldContentType.setSize(WIDTH, HEIGHT_LINE);
+    private void addUIContentTypeAndAccept(final JPanel requestUI) {
+        fieldContentType.setSize(W_100, HEIGHT_LINE);
+        fieldAccept.setSize(W_100, HEIGHT_LINE);
+
         fieldContentType.setText("application/xml");
+        fieldAccept.setText("application/xml");
 
         final Box box = Box.createHorizontalBox();
-        box.add(new JLabel("Content-Type "));
+        box.add(new JLabel("Content-Type  "));
         box.add(fieldContentType);
+        box.add(new JLabel("  Accept  "));
+        box.add(fieldAccept);
         requestUI.add(box);
+
     }
 
     private void addUIUserPassword(final JPanel requestUI) {
-        fieldUser.setSize(WIDTH, HEIGHT_LINE);
-        fieldPassword.setSize(WIDTH, HEIGHT_LINE);
+        fieldUser.setSize(W_100, HEIGHT_LINE);
+        fieldPassword.setSize(W_100, HEIGHT_LINE);
 
         fieldUser.setText("wikeo");
         fieldPassword.setText("oekiw");
 
-        Box box = Box.createHorizontalBox();
+        final Box box = Box.createHorizontalBox();
         box.add(new JLabel("User  "));
         box.add(fieldUser);
-        requestUI.add(box);
-
-        box = Box.createHorizontalBox();
-        box.add(new JLabel("Pwd   "));
+        box.add(new JLabel("  Pwd  "));
         box.add(fieldPassword);
         requestUI.add(box);
     }
 
     private void addUIBody(final JPanel requestUI) {
-        fieldBody.setSize(WIDTH, 400);
+        fieldBody.setSize(W_500, 400);
         fieldBody.setText("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
         final JScrollPane scroll = new JScrollPane(fieldBody);
         requestUI.add(scroll);
     }
 
     private void addUIPut(final JPanel panel) {
-        btnPut.setSize(WIDTH, HEIGHT_LINE * 2);
+        btnPut.setSize(W_500, HEIGHT_LINE * 2);
         btnPut.setAction(new AbstractAction(RequestAction.PUT.toString()) {
 
             @Override
@@ -133,7 +138,7 @@ public class AppUI extends JFrame {
     }
 
     private void addUIPost(final JPanel panel) {
-        btnPost.setSize(WIDTH, HEIGHT_LINE * 2);
+        btnPost.setSize(W_500, HEIGHT_LINE * 2);
         btnPost.setAction(new AbstractAction(RequestAction.POST.toString()) {
 
             @Override
@@ -145,7 +150,7 @@ public class AppUI extends JFrame {
     }
 
     private void addUIGet(final JPanel panel) {
-        btnGet.setSize(WIDTH, HEIGHT_LINE * 2);
+        btnGet.setSize(W_500, HEIGHT_LINE * 2);
         btnGet.setAction(new AbstractAction(RequestAction.GET.toString()) {
 
             @Override
@@ -158,13 +163,13 @@ public class AppUI extends JFrame {
     }
 
     private void addUIUrl(final JPanel requestUI) {
-        fieldUrl.setSize(WIDTH, HEIGHT_LINE);
+        fieldUrl.setSize(W_500, HEIGHT_LINE);
         fieldUrl.setText("");
         requestUI.add(fieldUrl);
     }
 
     private void addUIUrlBase(final JPanel requestUI) {
-        fieldUrlBase.setSize(WIDTH, HEIGHT_LINE);
+        fieldUrlBase.setSize(W_500, HEIGHT_LINE);
         fieldUrlBase.setText(URL_BASE);
         requestUI.add(fieldUrlBase);
     }
@@ -177,6 +182,7 @@ public class AppUI extends JFrame {
         config.password = fieldPassword.getText();
         config.body = fieldBody.getText();
         config.contentType = fieldContentType.getText();
+        config.accept = fieldAccept.getText();
         return config;
     }
 

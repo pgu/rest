@@ -7,5 +7,6 @@ public class RequestConfig {
     public String password;
     public String body;
     public String contentType;
+    public String accept;
 
 }

@@ -38,14 +38,14 @@ public class ClientRest {
         final HttpURLConnection connection = newConnection(url);
         connection.setUseCaches(false);
         setRequestMethod(reqMethod, connection);
-        connection.setRequestProperty("Accept", "application/xml");
+        connection.setRequestProperty("Accept", config.accept);
 
         if (ReqMethod.POST == reqMethod //
                 || ReqMethod.PUT == reqMethod // 
         ) {
             connection.setDoOutput(true);
             connection.setInstanceFollowRedirects(false);
-            connection.setRequestProperty("Content-Type", "application/xml");
+            connection.setRequestProperty("Content-Type", config.contentType);
 
             final OutputStream os = getOutputStream(connection);
             writeRequestBody(config, os);
