@@ -19,28 +19,23 @@ public class ResponseUI extends JFrame {
     public ResponseUI(final ResponseResult response, final RequestConfig config) {
 
         final JPanel responseUI = new JPanel();
-        responseUI.setAlignmentX(LEFT_ALIGNMENT);
         responseUI.setLayout(new BoxLayout(responseUI, BoxLayout.PAGE_AXIS));
 
         if (null != response.exception) {
             addLabel("Exception", responseUI);
             addField(response.exception, responseUI);
+
         } else {
-
-            addLabel("Url", responseUI);
-            addField(config.url, responseUI);
+            addRow("Url  ", "" + config.url, responseUI);
             responseUI.add(Box.createRigidArea(new Dimension(0, 5)));
 
-            addLabel("Code", responseUI);
-            addField(response.code, responseUI);
+            addCodeAndMessage(response, responseUI);
             responseUI.add(Box.createRigidArea(new Dimension(0, 5)));
 
-            addLabel("Content-Type", responseUI);
-            addField(response.contentType, responseUI);
+            addRow("Content-Type  ", response.contentType, responseUI);
             responseUI.add(Box.createRigidArea(new Dimension(0, 5)));
 
-            addLabel("Location", responseUI);
-            addField(response.location, responseUI);
+            addRow("Location  ", response.location, responseUI);
             responseUI.add(Box.createRigidArea(new Dimension(0, 5)));
 
             addLabel("Body", responseUI);
@@ -50,7 +45,6 @@ public class ResponseUI extends JFrame {
             responseArea.setText(response.body);
 
             final JScrollPane scroll = new JScrollPane(responseArea);
-            scroll.setAlignmentX(LEFT_ALIGNMENT);
             responseUI.add(scroll);
         }
 
@@ -64,15 +58,35 @@ public class ResponseUI extends JFrame {
         setContentPane(responseUI);
     }
 
+    private void addRow(final String label, final String value, final JPanel responseUI) {
+        final Box box = Box.createHorizontalBox();
+        box.add(new JLabel(label));
+        final JTextField jtf = new JTextField(value);
+        box.add(jtf);
+        responseUI.add(box);
+    }
+
+    private void addCodeAndMessage(final ResponseResult response, final JPanel responseUI) {
+        final Box box = Box.createHorizontalBox();
+
+        box.add(new JLabel("Code  "));
+        final JTextField code = new JTextField("" + response.code);
+        box.add(code);
+
+        box.add(new JLabel("  Msg  "));
+        final JTextField codemsg = new JTextField(response.responseMsg);
+        box.add(codemsg);
+
+        responseUI.add(box);
+    }
+
     private static void addField(final Object value, final JPanel responseUI) {
         final JTextField jtf = new JTextField(null == value ? "" : value.toString());
-        jtf.setAlignmentX(LEFT_ALIGNMENT);
         responseUI.add(jtf);
     }
 
     private static void addLabel(final String label, final JPanel responseUI) {
         final JLabel jlabel = new JLabel(label);
-        jlabel.setAlignmentX(LEFT_ALIGNMENT);
         responseUI.add(jlabel);
     }
 

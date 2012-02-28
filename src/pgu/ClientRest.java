@@ -59,11 +59,15 @@ public class ClientRest {
             /////// response 
 
             final int responseCode = getResponseCode(connection);
+            final String responseMessage = connection.getResponseMessage();
             final String contentType = connection.getContentType();
             final String location = connection.getHeaderField("Location");
             final StringBuilder sb = getResponseBody(connection);
 
             result.code = responseCode;
+            result.responseMsg = responseMessage;
+            System.out.println("code " + responseCode);
+            System.out.println(" msg " + responseMessage);
             result.contentType = contentType;
             result.location = location;
             result.body = sb.toString();
