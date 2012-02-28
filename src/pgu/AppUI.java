@@ -121,6 +121,7 @@ public class AppUI extends JFrame {
     }
 
     private void addUIPut(final JPanel panel) {
+        btnPut.setSize(WIDTH, HEIGHT_LINE * 2);
         btnPut.setAction(new AbstractAction(RequestAction.PUT.toString()) {
 
             @Override
@@ -132,6 +133,7 @@ public class AppUI extends JFrame {
     }
 
     private void addUIPost(final JPanel panel) {
+        btnPost.setSize(WIDTH, HEIGHT_LINE * 2);
         btnPost.setAction(new AbstractAction(RequestAction.POST.toString()) {
 
             @Override
@@ -143,6 +145,7 @@ public class AppUI extends JFrame {
     }
 
     private void addUIGet(final JPanel panel) {
+        btnGet.setSize(WIDTH, HEIGHT_LINE * 2);
         btnGet.setAction(new AbstractAction(RequestAction.GET.toString()) {
 
             @Override
