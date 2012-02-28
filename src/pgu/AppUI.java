@@ -2,7 +2,6 @@ package pgu;
 
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
@@ -11,6 +10,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -20,14 +20,18 @@ import javax.swing.SwingUtilities;
 @SuppressWarnings("serial")
 public class AppUI extends JFrame {
 
-    private static final String URL_BASE     = "http://localhost:8081/wikeo-core";
+    private static final String URL_BASE         = "http://localhost:8081/wikeo-core";
 
-    private final JTextField    fieldUrlBase = new JTextField();
-    private final JTextField    fieldUrl     = new JTextField();
-    private final JButton       btnGet       = new JButton();
-    private final JButton       btnPost      = new JButton();
-    private final JButton       btnPut       = new JButton();
-    private final JTextArea     fieldBody    = new JTextArea(10, 10);
+    private final JTextField    fieldUrlBase     = new JTextField();
+    private final JTextField    fieldUrl         = new JTextField();
+    private final JButton       btnGet           = new JButton();
+    private final JButton       btnPost          = new JButton();
+    private final JButton       btnPut           = new JButton();
+    private final JTextArea     fieldBody        = new JTextArea(100, 500);
+
+    private final JTextField    fieldUser        = new JTextField();
+    private final JTextField    fieldPassword    = new JTextField();
+    private final JTextField    fieldContentType = new JTextField();
 
     private enum RequestAction {
         GET, PUT, POST
@@ -37,9 +41,12 @@ public class AppUI extends JFrame {
         buildAppUI();
     }
 
+    private static final int WIDTH       = 500;
+    private static final int HEIGHT_LINE = 20;
+
     private void buildAppUI() {
-        setTitle("Rest");
-        setSize(500, 300);
+        setTitle("Pgu Client Rest");
+        setSize(WIDTH, 600);
         setLocationRelativeTo(null);
         setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -61,19 +68,53 @@ public class AppUI extends JFrame {
         requestUI.add(Box.createRigidArea(new Dimension(0, 5)));
 
         final JPanel btns = new JPanel();
-        btns.setLayout(new FlowLayout());
-
         addUIGet(btns);
         addUIPost(btns);
         addUIPut(btns);
         requestUI.add(btns);
+        requestUI.add(Box.createRigidArea(new Dimension(0, 20)));
+
+        addUIUserPassword(requestUI);
+        requestUI.add(Box.createRigidArea(new Dimension(0, 5)));
+
+        addUIContentType(requestUI);
+        requestUI.add(Box.createRigidArea(new Dimension(0, 5)));
 
         requestUI.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         return requestUI;
     }
 
+    private void addUIContentType(final JPanel requestUI) {
+        fieldContentType.setSize(WIDTH, HEIGHT_LINE);
+        fieldContentType.setText("application/xml");
+
+        final Box box = Box.createHorizontalBox();
+        box.add(new JLabel("Content-Type "));
+        box.add(fieldContentType);
+        requestUI.add(box);
+    }
+
+    private void addUIUserPassword(final JPanel requestUI) {
+        fieldUser.setSize(WIDTH, HEIGHT_LINE);
+        fieldPassword.setSize(WIDTH, HEIGHT_LINE);
+
+        fieldUser.setText("wikeo");
+        fieldPassword.setText("oekiw");
+
+        Box box = Box.createHorizontalBox();
+        box.add(new JLabel("User  "));
+        box.add(fieldUser);
+        requestUI.add(box);
+
+        box = Box.createHorizontalBox();
+        box.add(new JLabel("Pwd   "));
+        box.add(fieldPassword);
+        requestUI.add(box);
+    }
+
     private void addUIBody(final JPanel requestUI) {
+        fieldBody.setSize(WIDTH, 400);
         fieldBody.setText("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n");
         final JScrollPane scroll = new JScrollPane(fieldBody);
         requestUI.add(scroll);
@@ -114,27 +155,25 @@ public class AppUI extends JFrame {
     }
 
     private void addUIUrl(final JPanel requestUI) {
+        fieldUrl.setSize(WIDTH, HEIGHT_LINE);
         fieldUrl.setText("");
         requestUI.add(fieldUrl);
     }
 
     private void addUIUrlBase(final JPanel requestUI) {
+        fieldUrlBase.setSize(WIDTH, HEIGHT_LINE);
         fieldUrlBase.setText(URL_BASE);
         requestUI.add(fieldUrlBase);
     }
 
     private RequestConfig getRequestConfig() {
 
-        final String url = fieldUrlBase.getText() + fieldUrl.getText();
-        // TODO PGU  validation des valeurs
-        // TODO PGU add fields for user/password
-        // TODO PGU add fields for content type
-
         final RequestConfig config = new RequestConfig();
-        config.url = url;
-        config.username = "wikeo";
-        config.password = "oekiw";
+        config.url = fieldUrlBase.getText() + fieldUrl.getText();
+        config.username = fieldUser.getText();
+        config.password = fieldPassword.getText();
         config.body = fieldBody.getText();
+        config.contentType = fieldContentType.getText();
         return config;
     }
 
