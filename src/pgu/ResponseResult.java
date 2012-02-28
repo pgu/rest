@@ -6,5 +6,6 @@ public class ResponseResult {
     public String contentType;
     public String location;
     public String body;
+    public String exception;
 
 }

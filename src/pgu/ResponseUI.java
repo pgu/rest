@@ -22,31 +22,37 @@ public class ResponseUI extends JFrame {
         responseUI.setAlignmentX(LEFT_ALIGNMENT);
         responseUI.setLayout(new BoxLayout(responseUI, BoxLayout.PAGE_AXIS));
 
-        addLabel("Url", responseUI);
-        addField(config.url, responseUI);
-        responseUI.add(Box.createRigidArea(new Dimension(0, 5)));
+        if (null != response.exception) {
+            addLabel("Exception", responseUI);
+            addField(response.exception, responseUI);
+        } else {
 
-        addLabel("Code", responseUI);
-        addField(response.code, responseUI);
-        responseUI.add(Box.createRigidArea(new Dimension(0, 5)));
+            addLabel("Url", responseUI);
+            addField(config.url, responseUI);
+            responseUI.add(Box.createRigidArea(new Dimension(0, 5)));
 
-        addLabel("Content-Type", responseUI);
-        addField(response.contentType, responseUI);
-        responseUI.add(Box.createRigidArea(new Dimension(0, 5)));
+            addLabel("Code", responseUI);
+            addField(response.code, responseUI);
+            responseUI.add(Box.createRigidArea(new Dimension(0, 5)));
 
-        addLabel("Location", responseUI);
-        addField(response.location, responseUI);
-        responseUI.add(Box.createRigidArea(new Dimension(0, 5)));
+            addLabel("Content-Type", responseUI);
+            addField(response.contentType, responseUI);
+            responseUI.add(Box.createRigidArea(new Dimension(0, 5)));
 
-        addLabel("Body", responseUI);
-        final JTextArea responseArea = new JTextArea(100, 100);
-        responseArea.setEditable(false);
-        responseArea.setWrapStyleWord(true);
-        responseArea.setText(response.body);
+            addLabel("Location", responseUI);
+            addField(response.location, responseUI);
+            responseUI.add(Box.createRigidArea(new Dimension(0, 5)));
 
-        final JScrollPane scroll = new JScrollPane(responseArea);
-        scroll.setAlignmentX(LEFT_ALIGNMENT);
-        responseUI.add(scroll);
+            addLabel("Body", responseUI);
+            final JTextArea responseArea = new JTextArea(100, 100);
+            responseArea.setEditable(false);
+            responseArea.setWrapStyleWord(true);
+            responseArea.setText(response.body);
+
+            final JScrollPane scroll = new JScrollPane(responseArea);
+            scroll.setAlignmentX(LEFT_ALIGNMENT);
+            responseUI.add(scroll);
+        }
 
         responseUI.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
