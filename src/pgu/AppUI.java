@@ -79,7 +79,7 @@ public class AppUI extends JFrame {
     }
 
     private void addUIPut(final JPanel panel) {
-        btnPut.setAction(new AbstractAction("PUT") {
+        btnPut.setAction(new AbstractAction(RequestAction.PUT.toString()) {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -90,7 +90,7 @@ public class AppUI extends JFrame {
     }
 
     private void addUIPost(final JPanel panel) {
-        btnPost.setAction(new AbstractAction("POST") {
+        btnPost.setAction(new AbstractAction(RequestAction.POST.toString()) {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -101,7 +101,7 @@ public class AppUI extends JFrame {
     }
 
     private void addUIGet(final JPanel panel) {
-        btnGet.setAction(new AbstractAction("GET") {
+        btnGet.setAction(new AbstractAction(RequestAction.GET.toString()) {
 
             @Override
             public void actionPerformed(final ActionEvent e) {
