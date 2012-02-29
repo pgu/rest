@@ -6,9 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Authenticator;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.PasswordAuthentication;
-import java.net.ProtocolException;
 import java.net.URL;
 
 public class ClientRest {
@@ -37,11 +35,12 @@ public class ClientRest {
         try {
             setAuthenticationBasic(config);
 
-            final URL url = newUrl(config);
+            final URL url = new URL(config.url);
 
-            connection = newConnection(url);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setConnectTimeout(30 * 1000);
             connection.setUseCaches(false);
-            setRequestMethod(reqMethod, connection);
+            connection.setRequestMethod(reqMethod.toString());
             connection.setRequestProperty("Accept", config.accept);
 
             if (ReqMethod.POST == reqMethod //
@@ -51,14 +50,15 @@ public class ClientRest {
                 connection.setInstanceFollowRedirects(false);
                 connection.setRequestProperty("Content-Type", config.contentType);
 
-                final OutputStream os = getOutputStream(connection);
-                writeRequestBody(config, os);
-                flushOutputStream(os);
+                final OutputStream os = connection.getOutputStream();
+                os.write(config.body.getBytes());
+                os.flush();
+                os.close();
             }
 
             /////// response 
 
-            final int responseCode = getResponseCode(connection);
+            final int responseCode = connection.getResponseCode();
             final String responseMessage = connection.getResponseMessage();
             final String contentType = connection.getContentType();
             final String location = connection.getHeaderField("Location");
@@ -66,8 +66,6 @@ public class ClientRest {
 
             result.code = responseCode;
             result.responseMsg = responseMessage;
-            System.out.println("code " + responseCode);
-            System.out.println(" msg " + responseMessage);
             result.contentType = contentType;
             result.location = location;
             result.body = sb.toString();
@@ -84,53 +82,16 @@ public class ClientRest {
     }
 
     private static StringBuilder getResponseBody(final HttpURLConnection connection) throws IOException {
-        final BufferedReader reader = getReader(connection);
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         final StringBuilder sb = new StringBuilder();
-        String line = getLine(reader);
+        String line = reader.readLine();
         while (line != null) {
             sb.append(line);
             sb.append("\n");
 
-            line = getLine(reader);
+            line = reader.readLine();
         }
         return sb;
-    }
-
-    private static void flushOutputStream(final OutputStream os) throws IOException {
-        os.flush();
-    }
-
-    private static void writeRequestBody(final RequestConfig config, final OutputStream os) throws IOException {
-        os.write(config.body.getBytes());
-    }
-
-    private static OutputStream getOutputStream(final HttpURLConnection connection) throws IOException {
-        return connection.getOutputStream();
-    }
-
-    private static String getLine(final BufferedReader reader) throws IOException {
-        return reader.readLine();
-    }
-
-    private static BufferedReader getReader(final HttpURLConnection connection) throws IOException {
-        return new BufferedReader(new InputStreamReader(connection.getInputStream()));
-    }
-
-    private static int getResponseCode(final HttpURLConnection connection) throws IOException {
-        return connection.getResponseCode();
-    }
-
-    private static void setRequestMethod(final ReqMethod reqMethod, final HttpURLConnection connection)
-            throws ProtocolException {
-        connection.setRequestMethod(reqMethod.toString());
-    }
-
-    private static HttpURLConnection newConnection(final URL url) throws IOException {
-        return (HttpURLConnection) url.openConnection();
-    }
-
-    private static URL newUrl(final RequestConfig config) throws MalformedURLException {
-        return new URL(config.url);
     }
 
     private static void setAuthenticationBasic(final RequestConfig config) {
