@@ -14,10 +14,6 @@ public class Run {
                 appUI.setVisible(true);
             }
         });
-
-        while (true) {
-            // wait...
-        }
     }
 
 }
