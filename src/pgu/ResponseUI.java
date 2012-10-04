@@ -40,7 +40,6 @@ public class ResponseUI extends JFrame {
 
             addLabel("Body", responseUI);
             final JTextArea responseArea = new JTextArea(100, 100);
-            responseArea.setEditable(false);
             responseArea.setWrapStyleWord(true);
             responseArea.setText(response.body);
 
