@@ -3,15 +3,18 @@ package pgu;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -20,7 +23,10 @@ import javax.swing.SwingUtilities;
 @SuppressWarnings("serial")
 public class AppUI extends JFrame {
 
-    private static final String URL_BASE         = "http://localhost:8081/wikeo-core";
+    private static final String JSON_MEDIATYPE = "application/json";
+    private static final String XML_MEDIATYPE = "application/xml";
+
+    private static final String URL_BASE         = "http://localhost:8080/wikeo-core-mock/";
 
     private final JTextField    fieldUrlBase     = new JTextField();
     private final JTextField    fieldUrl         = new JTextField();
@@ -91,8 +97,40 @@ public class AppUI extends JFrame {
         fieldContentType.setSize(W_100, HEIGHT_LINE);
         fieldAccept.setSize(W_100, HEIGHT_LINE);
 
-        fieldContentType.setText("application/xml");
-        fieldAccept.setText("application/xml");
+        fieldContentType.setText(JSON_MEDIATYPE);
+        fieldAccept.setText(JSON_MEDIATYPE);
+
+        final JRadioButton xmlBtn = new JRadioButton("xml");
+        final JRadioButton jsonBtn = new JRadioButton("json");
+
+        xmlBtn.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                fieldContentType.setText(XML_MEDIATYPE);
+                fieldAccept.setText(XML_MEDIATYPE);
+            }
+        });
+
+        jsonBtn.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                fieldContentType.setText(JSON_MEDIATYPE);
+                fieldAccept.setText(JSON_MEDIATYPE);
+            }
+        });
+
+        final ButtonGroup typeGroup = new ButtonGroup();
+        typeGroup.add(jsonBtn);
+        typeGroup.add(xmlBtn);
+
+        jsonBtn.setSelected(true);
+
+        final Box radioBox = Box.createHorizontalBox();
+        radioBox.add(jsonBtn);
+        radioBox.add(xmlBtn);
+        requestUI.add(radioBox);
 
         final Box box = Box.createHorizontalBox();
         box.add(new JLabel("Content-Type  "));
